@@ -31,7 +31,4 @@ http://yeoman.io/authoring/
 
 ### More complex
 
-You could use generator-generator to generate a Yeoman Generator
-
-
-### Aris front-end project scaffolding
+You could use [generator-generator](https://github.com/yeoman/generator-generator) to generate a Yeoman Generator
