@@ -4,6 +4,19 @@
 
 THE WEB'S SCAFFOLDING TOOL FOR MODERN WEBAPPS
 
+```js
+_-----_
+|       |
+|--(o)--|   .--------------------------.
+`---------´ |    Welcome to Yeoman,    |
+( _´U`_ )   |   ladies and gentlemen!  |
+/___A___\   '__________________________'
+|  ~  |
+__'.___.'__
+  ´   `  |° ´ Y `
+```
+
+
 Yeoman page: http://yeoman.io/
 
 ## Use yeoman-generator to scaffolding project
@@ -31,4 +44,5 @@ http://yeoman.io/authoring/
 
 ### More complex
 
-You could use [generator-generator](https://github.com/yeoman/generator-generator) to generate a Yeoman Generator
+You could use [generator-generator](https://github.com/yeoman/generator-generator)
+to generate a Yeoman Generator.
