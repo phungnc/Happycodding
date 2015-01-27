@@ -47,7 +47,7 @@ You can use one of them to scaffolding the project
 for ex.
 
 ```
-yo angular
+$ yo angular
 ```
 
 to scaffolding AngularJS project
@@ -108,8 +108,8 @@ Yeoman is a Node.js module. We can use `npm init` to create a `package.json`
 
 #### Install yeoman-generator
 
-```js
-npm install yo yeoman-generator --save
+```
+$ npm install yo yeoman-generator --save
 ```
 
 #### Create project tree
@@ -145,87 +145,153 @@ Every method added to the prototype is run once the generator is called--and usu
 
 #### Running the generator
 
+At this point, you have a working generator. The next logical step would be to run it and see if it works.
+
 "Since you're developing the generator locally, it's not yet available as a global npm module. A global module may be created and symlinked to a local one, using npm. Here's what you'll want to do:
 
 On the command line, from the root of your generator project (in the generator-name/ folder), type:"
 
 ```
-npm link
+$ npm link
 ```
 
-Run,
+That will install your project dependencies and symlink a global module to your local file.
+It mean that, you have installed `simple-yeoman` on the local. Now you can call
 
 ```
-yo simple-yeoman
+$ yo simple-yeoman
 ```
-
-Output:
+This will output log:
 
 ```
 makeAppStructure method ran!
 cloneTemplateFile method ran
 ```
 
-#### Make more useful
+#### Make more
 
 - Make app structure
 
+Open `index.js` and add Yeoman `mkdir` function.
+
 ```js
 'use strict';
-var util = require('util');
-var path = require('path');
-var yeoman = require('yeoman-generator');
+var generators = require('yeoman-generator');
 
-var simpleGen = yeoman.generators.Base.extend({
+module.exports = generators.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
   },
   makeAppStructure: function() {
     console.log('makeAppStructure method ran!');
     // Create scaffolder
     this.dest.mkdir('src');
-    this.dest.mkdir('src/images');
-    this.dest.mkdir('src/scripts');
     this.dest.mkdir('src/styles');
-  }
+    this.dest.mkdir('src/styles/base');
+  },
   cloneTemplateFiles: function() {
     console.log('cloneTemplateFile method ran');
   }
 });
 
-module.exports = simpleGen;
 ```
+Make project dir, get into it
+
+```
+$ mkdir simple-yeoman-demo
+$ cd simple-yeoman-demo
+```
+
+Call simple-yeoman generator
+
+```
+$ yo simple-yeoman
+```
+
+This will create folder in simple-yeoman-demo project root.
+
+```
+└── src
+  └── styles
+    └── base
+```
+
+*Project root*:
+While running a generator, Yeoman searches the directory tree for a `.yo-rc.json` file.
+If found, it considers the location of the file as the root of the project.
+
+
+For ex, if we have folder like:
+
+```
+parent-of-simple-yeoman-demo
+  └── simple-yeoman-demo
+  └── .yo-rc.json
+```
+
+Above `yo simple-yeoman` will create `src` directory at `parent-of-simple-yeoman-demo` not working directory `simple-yeoman-demo`, even you are stay in it.
+So, if your generator is not running in your current working directory, make sure you don't have a `.yo-rc.json` somewhere up the directory tree.
+
 
 - Clone template files to project
 
+Yeoman will use the templates directory as the path for reading data and the folder the user is running your generator as the root path for outputting files.
+We make templates directory as below:
+
+```
+├───package.json
+├───app/
+    └───index.js
+├───templates/
+    └───styles/base/_base.less
+```
+
 ```js
 'use strict';
-var util = require('util');
-var path = require('path');
-var yeoman = require('yeoman-generator');
+var generators = require('yeoman-generator');
 
-var simpleGen = yeoman.generators.Base.extend({
+module.exports = generators.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
   },
   makeAppStructure: function() {
-    console.log('makeAppStructure method ran!');
     // Create scaffolder
     this.dest.mkdir('src');
-    this.dest.mkdir('src/images');
-    this.dest.mkdir('src/scripts');
     this.dest.mkdir('src/styles');
-  }
+    this.dest.mkdir('src/styles/base');
+  },
   cloneTemplateFiles: function() {
-    console.log('cloneTemplateFile method ran');
-    this.src.copy('styles/base/base.less', 'src/styles/base/base.less');
+    // clone template file
+    this.src.copy('styles/base/_base.less', 'src/styles/base/base.less')
   }
 });
 
-module.exports = simpleGen;
 ```
 
-### More complex
+Output:
 
-You could use [generator-generator](https://github.com/yeoman/generator-generator)
-to generate a Yeoman Generator.
+```
+create src/styles/base/base.less
+```
+
+### Make complex `generator`
+
+Yeoman team built a [generator-generator](https://github.com/yeoman/generator-generator) to help users get started with their own generator.
+
+```
+$ npm install -g generator-generator
+```
+Create the actual project, navigate to the folder of your choosing and run:
+
+```
+$ yo generator
+```
+After answer some question, we have structure like this:
+
+![Generator Structure](https://raw.githubusercontent.com/phungnc/Happycodding/feature/yeoman/FrontEnd/Build%20Tools/generator-generator-structure.png)
+
+From the skeleton of Generator, you can build Generator your self
+
+Ref [this article](http://code.tutsplus.com/tutorials/build-your-own-yeoman-generator--cms-20040) to know how to build your Generator base one `generator-generator`
+
+Happy Codding!
